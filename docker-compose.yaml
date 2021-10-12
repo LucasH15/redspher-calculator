@@ -1,6 +1,13 @@
 version: '3.8'
 
 services:
+  node:
+    container_name: redspher-calculator-node
+    tty: true
+    build:
+      context: ./node
+    volumes:
+      - ./app:/var/www/symfony_docker
   php:
     container_name: redspher-calculator-php
     build:
