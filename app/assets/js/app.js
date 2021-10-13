@@ -1,13 +1,15 @@
 import { Redirect, Route, Switch } from "react-router-dom";
 import React from "react";
-import Home from "./components/Home";
+import Home from "./pages/Home";
 
 const App = () => {
     return (
-        <Switch>
-            <Route path="/" component={Home} />
-            <Route render={() => <Redirect to="/" />} />
-        </Switch>
+        <div className="container-fluid py-2">
+            <Switch>
+                <Route path="/" component={Home} />
+                <Route render={() => <Redirect to="/" />} />
+            </Switch>
+        </div>
     )
 }
 

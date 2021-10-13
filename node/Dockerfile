@@ -1,4 +1,4 @@
-FROM node:current
+FROM node:16.10.0
 
 RUN apt-get update && \
 	apt-get install -y \
