@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react"
+import Calculator from "../components/Calculator"
 
 const Home = () => {
     return (
@@ -8,10 +9,10 @@ const Home = () => {
             </div>
 
             <div className="row">
-
+                <Calculator />
             </div>
         </>
     )
 }
 
-export default Home;
+export default Home

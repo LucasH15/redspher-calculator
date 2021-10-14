@@ -1,0 +1,38 @@
+.calculator {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  max-width: 100%;
+  width: auto;
+  margin: 50px auto 0;
+
+  .form-control {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    flex-direction: column;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    height: 72px;
+    font-size: 2rem;
+    line-height: 2rem;
+
+    p {
+      margin-bottom: 0;
+
+      &:first-of-type:not(:last-of-type) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .btn {
+    width: 85px;
+    height: 36px;
+
+    &:first-of-type {
+      grid-column-start: 4;
+      grid-column-end: 5;
+    }
+  }
+}
