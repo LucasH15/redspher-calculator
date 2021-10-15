@@ -27,6 +27,8 @@ class Calculate
             if ($i === strlen($calcul) - 1) {
                 $transform = "$transform$number$character";
                 $transform .= str_repeat(")", $nbParenthesisOpen);
+            } elseif ($character === "-" && $calcul[0] === "-") {
+                $number = $character;
             } elseif ($character === "+" || $character === "-") {
                 if ($nbParenthesisOpen > 0) {
                     $transform = "$transform$number)$character";
@@ -57,7 +59,7 @@ class Calculate
             $posLastOpenParenthesis = strrpos($firstStrip, "("); // Find last "("
             $finalStrip = substr($firstStrip, $posLastOpenParenthesis + 1, strlen($firstStrip));
             $calcul = str_replace("($finalStrip)", $this->calculate($this->splitToArray($finalStrip)), $calcul);
-            $this->calculWithinParenthesis($calcul);
+            return $this->calculWithinParenthesis($calcul);
         }
 
         return $calcul;
@@ -71,7 +73,9 @@ class Calculate
         for ($i = 0; $i < strlen($calcul); $i++) {
             $character = $calcul[$i];
 
-            if ($character === "+" || $character === "-" || $character === "/" || $character === "*") {
+            if ($character === "-" && $calcul[0] === "-") {
+                $test[0] = $character;
+            } elseif ($character === "+" || $character === "-" || $character === "/" || $character === "*") {
                 $test[] = $character;
                 $index += 2;
             } else {

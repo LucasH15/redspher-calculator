@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 
 const Calculator = () => {
@@ -6,7 +6,19 @@ const Calculator = () => {
     const [result, setResult] = useState(null)
 
     const addToCalcul = (character) => {
-        setCalcul((_calcul) => _calcul !== "0" ? `${_calcul}${character}` : character)
+        if ((character === "÷" || character === "x" || character === "+") && calcul === "0") {
+            setCalcul(`0${character}`)
+        } else if ((character === "÷" || character === "x" || character === "+" || character === "-") &&
+            (calcul.substr(calcul.length - 1, 1) === "+" || calcul.substr(calcul.length - 1, 1) === "-" || calcul.substr(calcul.length - 1, 1) === "x" || calcul.substr(calcul.length - 1, 1) === "÷")) {
+            setCalcul((_calcul) => `${calcul.substr( 0, calcul.length - 1)}${character}`)
+        } else {
+            if (result) {
+                setResult(null)
+                setCalcul(character)
+            } else {
+                setCalcul((_calcul) => _calcul !== "0" ? `${_calcul}${character}` : character)
+            }
+        }
     }
 
     const removeLastCharacter = () => {
@@ -20,7 +32,7 @@ const Calculator = () => {
 
     const sendCalcul = () => {
         axios.post("/api/calcul", {
-            calcul: calcul.replace("÷", "/").replace("x", "*")
+            calcul: calcul.replaceAll("÷", "/").replaceAll("x", "*")
         })
             .then((_response) => {
                 setResult(_response.data)
@@ -31,10 +43,56 @@ const Calculator = () => {
     }
 
     const addSpace = (_calcul) => {
-        return _calcul.replace("÷", " ÷ ").replace("-", " - ").replace("+", " + ").replace("x", " x ")
+        _calcul = _calcul.replaceAll("÷", " ÷ ").replaceAll("-", " - ").replaceAll("+", " + ").replaceAll("x", " x ")
+
+        if (_calcul.substr(1, 1) === "-") {
+            _calcul = _calcul.replace(" - ", "-")
+        }
+
+        return _calcul
     }
-    // TODO : add reset after result when first click
-    // TODO : replace old symbol if already a symbol
+
+    useEffect(() => {
+        const onKeyDown = ({key}) => {
+            switch (key) {
+                case "Backspace":
+                    result ? reset() : removeLastCharacter()
+                    break
+                case "=":
+                case "Enter":
+                    sendCalcul()
+                    break
+                case "/":
+                    addToCalcul("÷")
+                    break
+                case "*":
+                    addToCalcul("x")
+                    break
+                case "-":
+                case "+":
+                case ".":
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    addToCalcul(key)
+                    break
+            }
+        }
+
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    })
+
     return (
         <div className="calculator">
             <div className="form-control">
