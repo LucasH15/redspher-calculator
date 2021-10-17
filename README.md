@@ -4,3 +4,6 @@
 - run redspher-calculator-node cli and run `yarn install`
 
 View website in `http://localhost:8080/`
+
+# TEST
+- run `php bin/phpunit`
