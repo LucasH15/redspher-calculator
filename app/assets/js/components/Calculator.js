@@ -4,13 +4,31 @@ import axios from "axios"
 const Calculator = () => {
     const [calcul, setCalcul] = useState("0")
     const [result, setResult] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const addToCalcul = (character) => {
         if ((character === "÷" || character === "x" || character === "+") && calcul === "0") {
             setCalcul(`0${character}`)
         } else if ((character === "÷" || character === "x" || character === "+" || character === "-") &&
             (calcul.substr(calcul.length - 1, 1) === "+" || calcul.substr(calcul.length - 1, 1) === "-" || calcul.substr(calcul.length - 1, 1) === "x" || calcul.substr(calcul.length - 1, 1) === "÷")) {
-            setCalcul((_calcul) => `${calcul.substr( 0, calcul.length - 1)}${character}`)
+            setCalcul((_calcul) => `${calcul.substr(0, calcul.length - 1)}${character}`)
+        } else if (character === ".") {
+            const lastPlus = calcul.lastIndexOf("+")
+            const lastMinus = calcul.lastIndexOf("-")
+            const lastMultiple = calcul.lastIndexOf("x")
+            const lastDivide = calcul.lastIndexOf("÷")
+            const lastCharacter = Math.max(lastPlus, lastMinus, lastMultiple, lastDivide)
+
+            if (calcul.substr(calcul.length - 1, 1) !== ".") { // check if last character is not already a dot
+                if (lastCharacter === -1 || calcul.substr(lastCharacter + 1).indexOf(".") === -1) { // check if already a symbol OR if not already a dot after last symbol
+                    if (result) {
+                        setResult(null)
+                        setCalcul(".")
+                    } else {
+                        setCalcul((_calcul) => `${_calcul}.`)
+                    }
+                }
+            }
         } else {
             if (result) {
                 setResult(null)
@@ -38,7 +56,7 @@ const Calculator = () => {
                 setResult(_response.data)
             })
             .catch((_error) => {
-                console.log(_error.message)
+                setErrorMessage(_error.message)
             })
     }
 
@@ -95,6 +113,7 @@ const Calculator = () => {
 
     return (
         <div className="calculator">
+            {errorMessage && <div><p className="text-danger">{errorMessage}</p></div>}
             <div className="form-control">
                 <p>{addSpace(calcul)} {result && "="}</p>
                 {result && <p>{result}</p>}

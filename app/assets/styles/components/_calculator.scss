@@ -2,26 +2,29 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
-  max-width: 100%;
-  width: auto;
+  max-width: 400px;
   margin: 50px auto 0;
 
-  .form-control {
+  > div {
     grid-column-start: 1;
     grid-column-end: 5;
-    flex-direction: column;
-    display: flex;
-    justify-content: end;
-    align-items: end;
-    height: 72px;
-    font-size: 2rem;
-    line-height: 2rem;
 
-    p {
-      margin-bottom: 0;
+    &.form-control {
+      overflow-x: hidden;
+      flex-direction: column;
+      display: flex;
+      justify-content: end;
+      align-items: end;
+      height: 72px;
+      font-size: 2rem;
+      line-height: 2rem;
 
-      &:first-of-type:not(:last-of-type) {
-        font-size: 1rem;
+      p {
+        margin-bottom: 0;
+
+        &:first-of-type:not(:last-of-type) {
+          font-size: 1rem;
+        }
       }
     }
   }
